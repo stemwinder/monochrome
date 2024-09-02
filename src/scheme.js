@@ -26,6 +26,9 @@ const scheme = ({ background, foreground, override, amplifier }) => {
   // Merge with the generated warning scheme;
   merge(draft, warningScheme(foreground));
 
+  // Merge with the generated error scheme;
+  merge(draft, errorScheme(foreground));
+
   // Apply overrides.
   if (override != null) merge(draft, override);
 
@@ -115,6 +118,27 @@ const warningScheme = (color) => {
       'listFilterWidget.noMatchesOutline': error,
       'list.errorForeground': error,
       'list.warningForeground': warning,
+    },
+  };
+};
+
+/**
+ * Defines the error and warning colors for editor.
+ *
+ * @param {*} color The primary color to calculate the error and warning colors.
+ * @return {*} Error and warning theme data.
+ */
+const errorScheme = (color) => {
+  // Calculate the error color (partially saturated red)
+  const error = chroma.scale([color, 'red']).mode('lab')(0.8).hex();
+
+  // Calculate the warning color (partially saturated orange)
+  const warning = chroma.scale([color, 'orange']).mode('lab')(0.8).hex();
+
+  return {
+    colors: {
+      'editorError.foreground': error,
+      'editorWarning.foreground': warning,
     },
   };
 };
